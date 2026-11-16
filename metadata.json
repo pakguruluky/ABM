@@ -1,0 +1,6 @@
+{
+  "name": "ABM — Sistem Asesmen Bakat dan Minat",
+  "description": "Platform Asesmen Bakat dan Minat terintegrasi Firebase dengan tes 7 dimensi bakat, 18 aspek minat, portal hasil siswa real-time, dan dasbor admin dengan ekspor PDF.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

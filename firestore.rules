@@ -1,0 +1,169 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global default deny safety net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidInstitution(data) {
+      return data.keys().hasAll([
+          'name', 'subtitle', 'npsn', 'address', 'city', 'phone',
+          'email', 'website', 'principalName', 'principalNip', 'logoBase64', 'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'name', 'subtitle', 'npsn', 'address', 'city', 'phone',
+          'email', 'website', 'principalName', 'principalNip', 'logoBase64', 'updatedAt'
+        ])
+        && data.name is string && data.name.size() >= 1 && data.name.size() <= 200
+        && data.subtitle is string && data.subtitle.size() <= 250
+        && data.npsn is string && data.npsn.size() <= 50
+        && data.address is string && data.address.size() <= 400
+        && data.city is string && data.city.size() <= 120
+        && data.phone is string && data.phone.size() <= 60
+        && data.email is string && data.email.size() <= 150
+        && data.website is string && data.website.size() <= 200
+        && data.principalName is string && data.principalName.size() <= 150
+        && data.principalNip is string && data.principalNip.size() <= 80
+        && data.logoBase64 is string && data.logoBase64.size() <= 450000
+        && data.updatedAt is string && data.updatedAt.size() <= 64;
+    }
+
+    function isValidAssessmentSettings(data) {
+      return data.keys().hasAll(['mode', 'releaseStart', 'releaseEnd', 'updatedAt'])
+        && data.keys().hasOnly(['mode', 'releaseStart', 'releaseEnd', 'updatedAt'])
+        && data.mode in ['immediate', 'scheduled', 'manual_review']
+        && data.releaseStart is string && data.releaseStart.size() <= 64
+        && data.releaseEnd is string && data.releaseEnd.size() <= 64
+        && data.updatedAt is string && data.updatedAt.size() <= 64;
+    }
+
+    function isValidStudent(data) {
+      return data.keys().hasAll([
+          'id', 'fullName', 'birthPlace', 'birthDate', 'classMajor', 'schoolOrigin',
+          'address', 'studentPhone', 'parentPhone', 'majorChoice1', 'majorChoice2',
+          'username', 'password', 'testStatus', 'reviewStatus', 'registeredAt',
+          'completedAt', 'aptitudeAnswers', 'interestAnswers', 'aptitudeScores',
+          'interestScores', 'dominantInterests', 'majorAlignment'
+        ])
+        && data.keys().hasOnly([
+          'id', 'fullName', 'birthPlace', 'birthDate', 'classMajor', 'schoolOrigin',
+          'address', 'studentPhone', 'parentPhone', 'majorChoice1', 'majorChoice2',
+          'username', 'password', 'testStatus', 'reviewStatus', 'registeredAt',
+          'completedAt', 'aptitudeAnswers', 'interestAnswers', 'aptitudeScores',
+          'interestScores', 'dominantInterests', 'majorAlignment'
+        ])
+        && isValidId(data.id)
+        && data.fullName is string && data.fullName.size() >= 1 && data.fullName.size() <= 200
+        && data.birthPlace is string && data.birthPlace.size() >= 1 && data.birthPlace.size() <= 120
+        && data.birthDate is string && data.birthDate.size() >= 1 && data.birthDate.size() <= 32
+        && data.classMajor is string && data.classMajor.size() >= 1 && data.classMajor.size() <= 80
+        && data.schoolOrigin is string && data.schoolOrigin.size() >= 1 && data.schoolOrigin.size() <= 200
+        && data.address is string && data.address.size() >= 1 && data.address.size() <= 400
+        && data.studentPhone is string && data.studentPhone.size() >= 1 && data.studentPhone.size() <= 40
+        && data.parentPhone is string && data.parentPhone.size() >= 1 && data.parentPhone.size() <= 40
+        && data.majorChoice1 is string && data.majorChoice1.size() >= 1 && data.majorChoice1.size() <= 150
+        && data.majorChoice2 is string && data.majorChoice2.size() >= 1 && data.majorChoice2.size() <= 150
+        && isValidId(data.username) && data.username.size() <= 64
+        && data.password is string && data.password.size() >= 3 && data.password.size() <= 128
+        && data.testStatus in ['registered', 'in_progress', 'completed']
+        && data.reviewStatus in ['pending_review', 'approved']
+        && data.registeredAt is string && data.registeredAt.size() <= 64
+        && data.completedAt is string && data.completedAt.size() <= 64
+        && data.aptitudeAnswers is map
+        && data.interestAnswers is map
+        && data.aptitudeScores is map
+        && data.interestScores is map
+        && data.dominantInterests is list && data.dominantInterests.size() <= 18
+        && data.majorAlignment is map;
+    }
+
+    function isValidCounselor(data) {
+      return data.keys().hasAll(['id', 'fullName', 'nip', 'username', 'password', 'isActive', 'createdAt'])
+        && data.keys().hasOnly(['id', 'fullName', 'nip', 'username', 'password', 'isActive', 'createdAt'])
+        && isValidId(data.id)
+        && data.fullName is string && data.fullName.size() >= 1 && data.fullName.size() <= 200
+        && data.nip is string && data.nip.size() <= 80
+        && isValidId(data.username) && data.username.size() >= 3 && data.username.size() <= 64
+        && data.password is string && data.password.size() >= 4 && data.password.size() <= 128
+        && data.isActive is bool
+        && data.createdAt is string && data.createdAt.size() <= 64;
+    }
+
+    function isValidUsernameIndex(data) {
+      return data.keys().hasAll(['studentId', 'createdAt'])
+        && data.keys().hasOnly(['studentId', 'createdAt'])
+        && isValidId(data.studentId)
+        && data.createdAt is string && data.createdAt.size() <= 64;
+    }
+
+    match /test/{docId} {
+      allow get: if docId == 'connection';
+    }
+
+    match /settings/{settingId} {
+      allow get: if settingId in ['institution', 'assessment'];
+      allow create, update: if (
+        (settingId == 'institution' && isValidInstitution(incoming())) ||
+        (settingId == 'assessment' && isValidAssessmentSettings(incoming()))
+      );
+    }
+
+    match /usernames/{username} {
+      allow get: if isValidId(username);
+      allow create: if isValidId(username) && isValidUsernameIndex(incoming());
+      allow delete: if isValidId(username);
+    }
+
+    match /counselors/{counselorId} {
+      allow get: if isValidId(counselorId);
+      allow list: if true;
+      allow create: if isValidId(counselorId)
+        && isValidCounselor(incoming())
+        && incoming().id == counselorId;
+      allow update: if isValidId(counselorId)
+        && isValidCounselor(incoming())
+        && incoming().id == existing().id
+        && incoming().createdAt == existing().createdAt
+        && incoming().diff(existing()).affectedKeys().hasOnly(['fullName', 'nip', 'password', 'isActive']);
+      allow delete: if isValidId(counselorId);
+    }
+
+    match /students/{studentId} {
+      allow get: if isValidId(studentId);
+      allow list: if true;
+      allow create: if isValidId(studentId)
+        && isValidStudent(incoming())
+        && incoming().id == studentId;
+      allow update: if isValidId(studentId)
+        && isValidStudent(incoming())
+        && incoming().id == existing().id
+        && incoming().registeredAt == existing().registeredAt
+        && (
+          incoming().diff(existing()).affectedKeys().hasOnly([
+            'testStatus', 'completedAt', 'aptitudeAnswers', 'interestAnswers',
+            'aptitudeScores', 'interestScores', 'dominantInterests', 'majorAlignment'
+          ]) ||
+          incoming().diff(existing()).affectedKeys().hasOnly(['reviewStatus']) ||
+          incoming().diff(existing()).affectedKeys().hasOnly([
+            'fullName', 'birthPlace', 'birthDate', 'classMajor', 'schoolOrigin',
+            'address', 'studentPhone', 'parentPhone', 'majorChoice1', 'majorChoice2',
+            'reviewStatus', 'testStatus'
+          ])
+        );
+      allow delete: if isValidId(studentId);
+    }
+  }
+}

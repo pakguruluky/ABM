@@ -1,0 +1,151 @@
+{
+  "entities": {
+    "InstitutionSettings": {
+      "title": "InstitutionSettings",
+      "description": "Profil lengkap lembaga penyelenggara Asesmen Bakat dan Minat.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "maxLength": 200, "description": "Nama Lembaga atau Sekolah" },
+        "subtitle": { "type": "string", "maxLength": 250, "description": "Sub-judul / Dinas / Yayasan" },
+        "npsn": { "type": "string", "maxLength": 50, "description": "NPSN atau Kode Lembaga" },
+        "address": { "type": "string", "maxLength": 400, "description": "Alamat lengkap lembaga" },
+        "city": { "type": "string", "maxLength": 120, "description": "Kota atau Kabupaten untuk titik mangsa surat PDF" },
+        "phone": { "type": "string", "maxLength": 60, "description": "Nomor telepon lembaga" },
+        "email": { "type": "string", "maxLength": 150, "description": "Email resmi lembaga" },
+        "website": { "type": "string", "maxLength": 200, "description": "URL website lembaga" },
+        "principalName": { "type": "string", "maxLength": 150, "description": "Nama Kepala Lembaga atau Koordinator BK" },
+        "principalNip": { "type": "string", "maxLength": 80, "description": "NIP Kepala Lembaga atau Koordinator BK" },
+        "logoBase64": { "type": "string", "maxLength": 450000, "description": "Logo lembaga dalam format Base64 Data URL" },
+        "updatedAt": { "type": "string", "maxLength": 64, "description": "Waktu pembaruan terakhir ISO-8601" }
+      },
+      "required": [
+        "name",
+        "subtitle",
+        "npsn",
+        "address",
+        "city",
+        "phone",
+        "email",
+        "website",
+        "principalName",
+        "principalNip",
+        "logoBase64",
+        "updatedAt"
+      ]
+    },
+    "AssessmentSettings": {
+      "title": "AssessmentSettings",
+      "description": "Pengaturan mode rilis hasil asesmen dan jadwal rilis.",
+      "type": "object",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": ["immediate", "scheduled", "manual_review"],
+          "description": "Mode rilis hasil asesmen"
+        },
+        "releaseStart": { "type": "string", "maxLength": 64, "description": "Waktu mulai rilis terjadwal" },
+        "releaseEnd": { "type": "string", "maxLength": 64, "description": "Batas akhir akses hasil terjadwal (opsional)" },
+        "updatedAt": { "type": "string", "maxLength": 64, "description": "Waktu pembaruan terakhir ISO-8601" }
+      },
+      "required": ["mode", "releaseStart", "releaseEnd", "updatedAt"]
+    },
+    "StudentRecord": {
+      "title": "StudentRecord",
+      "description": "Biodata peserta didik, kredensial login, jawaban, skor 7 bakat & 18 minat, serta status review.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "fullName": { "type": "string", "maxLength": 200 },
+        "birthPlace": { "type": "string", "maxLength": 120 },
+        "birthDate": { "type": "string", "maxLength": 32 },
+        "classMajor": { "type": "string", "maxLength": 80 },
+        "schoolOrigin": { "type": "string", "maxLength": 200 },
+        "address": { "type": "string", "maxLength": 400 },
+        "studentPhone": { "type": "string", "maxLength": 40 },
+        "parentPhone": { "type": "string", "maxLength": 40 },
+        "majorChoice1": { "type": "string", "maxLength": 150 },
+        "majorChoice2": { "type": "string", "maxLength": 150 },
+        "username": { "type": "string", "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "password": { "type": "string", "maxLength": 128 },
+        "testStatus": { "type": "string", "enum": ["registered", "in_progress", "completed"] },
+        "reviewStatus": { "type": "string", "enum": ["pending_review", "approved"] },
+        "registeredAt": { "type": "string", "maxLength": 64 },
+        "completedAt": { "type": "string", "maxLength": 64 },
+        "aptitudeAnswers": { "type": "object", "description": "Peta ID soal bakat ke indeks jawaban" },
+        "interestAnswers": { "type": "object", "description": "Peta ID pernyataan minat ke nilai Likert 1-5" },
+        "aptitudeScores": { "type": "object", "description": "Peta 7 dimensi bakat ke skor 0-100" },
+        "interestScores": { "type": "object", "description": "Peta 18 dimensi minat ke skor 0-100" },
+        "dominantInterests": { "type": "array", "description": "Daftar minat dominan dengan skor > 50" },
+        "majorAlignment": { "type": "object", "description": "Hasil evaluasi keselarasan bakat-minat terhadap pilihan jurusan" }
+      },
+      "required": [
+        "id",
+        "fullName",
+        "birthPlace",
+        "birthDate",
+        "classMajor",
+        "schoolOrigin",
+        "address",
+        "studentPhone",
+        "parentPhone",
+        "majorChoice1",
+        "majorChoice2",
+        "username",
+        "password",
+        "testStatus",
+        "reviewStatus",
+        "registeredAt",
+        "completedAt",
+        "aptitudeAnswers",
+        "interestAnswers",
+        "aptitudeScores",
+        "interestScores",
+        "dominantInterests",
+        "majorAlignment"
+      ]
+    },
+    "CounselorAccount": {
+      "title": "CounselorAccount",
+      "description": "Akun Guru BK (hanya lihat hasil asesmen) yang dibuat dan dikelola oleh Admin.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "fullName": { "type": "string", "maxLength": 200 },
+        "nip": { "type": "string", "maxLength": 80 },
+        "username": { "type": "string", "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "password": { "type": "string", "maxLength": 128 },
+        "isActive": { "type": "boolean" },
+        "createdAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "fullName", "nip", "username", "password", "isActive", "createdAt"]
+    },
+    "UsernameIndex": {
+      "title": "UsernameIndex",
+      "description": "Indeks keunikan username siswa.",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["studentId", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/settings/{settingId}": {
+      "schema": "InstitutionSettings",
+      "description": "Dokumen pengaturan global: institution dan assessment."
+    },
+    "/students/{studentId}": {
+      "schema": "StudentRecord",
+      "description": "Data peserta didik, progres tes, skor asesmen, dan status review."
+    },
+    "/counselors/{counselorId}": {
+      "schema": "CounselorAccount",
+      "description": "Akun Guru BK untuk melihat hasil asesmen siswa secara read-only."
+    },
+    "/usernames/{username}": {
+      "schema": "UsernameIndex",
+      "description": "Indeks reservasi keunikan username peserta."
+    }
+  }
+}
