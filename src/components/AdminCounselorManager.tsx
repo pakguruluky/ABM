@@ -118,7 +118,7 @@ export const AdminCounselorManager: React.FC<AdminCounselorManagerProps> = ({
       {/* Form Tambah Akun Guru BK */}
       <form
         onSubmit={handleCreate}
-        className="bg-white border border-slate-200 rounded-xl p-6 sm:p-8 space-y-5"
+        className="bg-white border border-slate-200 rounded-xl p-4 sm:p-6 lg:p-8 space-y-5"
       >
         <div className="flex items-start gap-3">
           <div className="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0">
@@ -219,7 +219,7 @@ export const AdminCounselorManager: React.FC<AdminCounselorManagerProps> = ({
           <button
             type="submit"
             disabled={creating}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-emerald-700 hover:bg-emerald-800 disabled:opacity-50 text-white text-sm font-semibold transition-colors cursor-pointer"
+            className="w-full sm:w-auto min-h-[44px] inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-emerald-700 hover:bg-emerald-800 disabled:opacity-50 text-white text-sm font-semibold transition-colors cursor-pointer"
           >
             {creating ? <Loader2 className="w-4 h-4 animate-spin" /> : <UserPlus className="w-4 h-4" />}
             Tambahkan Akun Guru BK
@@ -227,9 +227,9 @@ export const AdminCounselorManager: React.FC<AdminCounselorManagerProps> = ({
         </div>
       </form>
 
-      {/* Tabel Daftar Akun Guru BK */}
+      {/* Daftar Akun Guru BK: Card pada HP/Tablet Kecil, Tabel pada Tablet Besar/Laptop/PC */}
       <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
-        <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
+        <div className="px-4 sm:px-6 py-4 border-b border-slate-200 flex items-center justify-between">
           <div>
             <h3 className="font-display font-bold text-base text-slate-950">
               Daftar Akun Guru BK Terdaftar
@@ -241,7 +241,7 @@ export const AdminCounselorManager: React.FC<AdminCounselorManagerProps> = ({
         </div>
 
         {counselors.length === 0 ? (
-          <div className="p-10 text-center">
+          <div className="p-8 sm:p-10 text-center">
             <UserCheck className="w-9 h-9 text-slate-300 mx-auto mb-2" />
             <p className="font-display font-semibold text-sm text-slate-800">
               Belum Ada Akun Guru BK
@@ -251,25 +251,20 @@ export const AdminCounselorManager: React.FC<AdminCounselorManagerProps> = ({
             </p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-600">
-                  <th className="py-3 px-4">Nama Guru BK</th>
-                  <th className="py-3 px-4">Username</th>
-                  <th className="py-3 px-4">NIP</th>
-                  <th className="py-3 px-4">Status</th>
-                  <th className="py-3 px-4">Dibuat</th>
-                  <th className="py-3 px-4 text-right">Aksi</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 text-xs sm:text-sm">
-                {counselors.map((c) => (
-                  <tr key={c.id} className="hover:bg-slate-50/70">
-                    <td className="py-3 px-4 font-semibold text-slate-900">{c.fullName}</td>
-                    <td className="py-3 px-4 font-mono text-indigo-900">@{c.username}</td>
-                    <td className="py-3 px-4 font-mono text-slate-600">{c.nip || '-'}</td>
-                    <td className="py-3 px-4">
+          <>
+            {/* Mobile & Small Tablet Card Layout (< md) */}
+            <div className="md:hidden divide-y divide-slate-200">
+              {counselors.map((c) => (
+                <div key={c.id} className="p-4 space-y-3">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="min-w-0">
+                      <p className="font-semibold text-sm text-slate-900 truncate">{c.fullName}</p>
+                      <p className="text-xs font-mono text-indigo-900">@{c.username}</p>
+                      <p className="text-xs text-slate-500 mt-0.5">
+                        NIP: {c.nip || '-'} · Dibuat {formatIndonesianDate(c.createdAt)}
+                      </p>
+                    </div>
+                    <div className="shrink-0">
                       {c.isActive ? (
                         <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-700">
                           <CheckCircle2 className="w-3.5 h-3.5" />
@@ -278,64 +273,133 @@ export const AdminCounselorManager: React.FC<AdminCounselorManagerProps> = ({
                       ) : (
                         <span className="text-xs font-semibold text-slate-500">Nonaktif</span>
                       )}
-                    </td>
-                    <td className="py-3 px-4 text-xs text-slate-500">
-                      {formatIndonesianDate(c.createdAt)}
-                    </td>
-                    <td className="py-3 px-4 text-right whitespace-nowrap">
-                      <div className="inline-flex items-center gap-1.5">
-                        <button
-                          type="button"
-                          onClick={() => handleToggleActive(c)}
-                          className={`px-2.5 py-1.5 rounded-md text-xs font-semibold border transition-colors cursor-pointer ${
-                            c.isActive
-                              ? 'border-slate-200 bg-white text-slate-700 hover:bg-slate-100'
-                              : 'border-emerald-200 bg-emerald-50 text-emerald-800 hover:bg-emerald-100'
-                          }`}
-                        >
-                          {c.isActive ? 'Nonaktifkan' : 'Aktifkan'}
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setEditingCounselor(c);
-                            setEditPassVisible(false);
-                          }}
-                          title="Edit / Reset Password"
-                          className="p-1.5 rounded-md border border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-indigo-800 cursor-pointer"
-                        >
-                          <Edit3 className="w-4 h-4" />
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setDeleteTarget(c)}
-                          title="Hapus Akun Guru BK"
-                          className="p-1.5 rounded-md border border-slate-200 text-slate-500 hover:bg-red-50 hover:text-red-700 hover:border-red-200 cursor-pointer"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </td>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-2 pt-1">
+                    <button
+                      type="button"
+                      onClick={() => handleToggleActive(c)}
+                      className={`min-h-[38px] px-2.5 py-1.5 rounded-lg text-xs font-semibold border transition-colors cursor-pointer ${
+                        c.isActive
+                          ? 'border-slate-200 bg-white text-slate-700 hover:bg-slate-100'
+                          : 'border-emerald-200 bg-emerald-50 text-emerald-800 hover:bg-emerald-100'
+                      }`}
+                    >
+                      {c.isActive ? 'Nonaktifkan' : 'Aktifkan'}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setEditingCounselor(c);
+                        setEditPassVisible(false);
+                      }}
+                      className="min-h-[38px] inline-flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 cursor-pointer"
+                    >
+                      <Edit3 className="w-3.5 h-3.5" />
+                      Edit
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setDeleteTarget(c)}
+                      className="min-h-[38px] inline-flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-red-200 text-red-700 bg-red-50/50 hover:bg-red-50 text-xs font-semibold cursor-pointer"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                      Hapus
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Desktop & Large Tablet Table (>= md) */}
+            <div className="hidden md:block overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-600">
+                    <th className="py-3 px-4">Nama Guru BK</th>
+                    <th className="py-3 px-4">Username</th>
+                    <th className="py-3 px-4">NIP</th>
+                    <th className="py-3 px-4">Status</th>
+                    <th className="py-3 px-4">Dibuat</th>
+                    <th className="py-3 px-4 text-right">Aksi</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody className="divide-y divide-slate-100 text-xs sm:text-sm">
+                  {counselors.map((c) => (
+                    <tr key={c.id} className="hover:bg-slate-50/70">
+                      <td className="py-3 px-4 font-semibold text-slate-900">{c.fullName}</td>
+                      <td className="py-3 px-4 font-mono text-indigo-900">@{c.username}</td>
+                      <td className="py-3 px-4 font-mono text-slate-600">{c.nip || '-'}</td>
+                      <td className="py-3 px-4">
+                        {c.isActive ? (
+                          <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-700">
+                            <CheckCircle2 className="w-3.5 h-3.5" />
+                            Aktif
+                          </span>
+                        ) : (
+                          <span className="text-xs font-semibold text-slate-500">Nonaktif</span>
+                        )}
+                      </td>
+                      <td className="py-3 px-4 text-xs text-slate-500">
+                        {formatIndonesianDate(c.createdAt)}
+                      </td>
+                      <td className="py-3 px-4 text-right whitespace-nowrap">
+                        <div className="inline-flex items-center gap-1.5">
+                          <button
+                            type="button"
+                            onClick={() => handleToggleActive(c)}
+                            className={`px-2.5 py-1.5 rounded-md text-xs font-semibold border transition-colors cursor-pointer ${
+                              c.isActive
+                                ? 'border-slate-200 bg-white text-slate-700 hover:bg-slate-100'
+                                : 'border-emerald-200 bg-emerald-50 text-emerald-800 hover:bg-emerald-100'
+                            }`}
+                          >
+                            {c.isActive ? 'Nonaktifkan' : 'Aktifkan'}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setEditingCounselor(c);
+                              setEditPassVisible(false);
+                            }}
+                            title="Edit / Reset Password"
+                            className="p-1.5 rounded-md border border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-indigo-800 cursor-pointer"
+                          >
+                            <Edit3 className="w-4 h-4" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setDeleteTarget(c)}
+                            title="Hapus Akun Guru BK"
+                            className="p-1.5 rounded-md border border-slate-200 text-slate-500 hover:bg-red-50 hover:text-red-700 hover:border-red-200 cursor-pointer"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
       </div>
 
       {/* Modal Edit Akun Guru BK */}
       {editingCounselor && (
-        <div className="fixed inset-0 z-50 bg-slate-950/60 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl border border-slate-200 max-w-md w-full p-6">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-200">
-              <h3 className="font-display text-base font-bold text-slate-950">
+        <div className="fixed inset-0 z-50 bg-slate-950/60 flex items-center justify-center p-3 sm:p-4">
+          <div className="bg-white rounded-xl border border-slate-200 max-w-md w-full p-5 sm:p-6">
+            <div className="flex items-center justify-between gap-2 pb-3 border-b border-slate-200">
+              <h3 className="font-display text-base font-bold text-slate-950 truncate">
                 Edit Akun Guru BK (@{editingCounselor.username})
               </h3>
               <button
                 type="button"
                 onClick={() => setEditingCounselor(null)}
-                className="p-1 text-slate-400 hover:text-slate-700 cursor-pointer"
+                aria-label="Tutup modal edit"
+                className="p-1.5 text-slate-400 hover:text-slate-700 cursor-pointer shrink-0"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -394,18 +458,18 @@ export const AdminCounselorManager: React.FC<AdminCounselorManagerProps> = ({
                 </div>
               </div>
 
-              <div className="pt-2 flex justify-end gap-3">
+              <div className="pt-2 flex flex-col-reverse sm:flex-row sm:justify-end gap-2.5 sm:gap-3">
                 <button
                   type="button"
                   onClick={() => setEditingCounselor(null)}
-                  className="px-4 py-2 rounded-lg border border-slate-200 text-xs font-semibold text-slate-700 cursor-pointer"
+                  className="w-full sm:w-auto min-h-[42px] px-4 py-2 rounded-lg border border-slate-200 text-xs font-semibold text-slate-700 cursor-pointer"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
                   disabled={savingEdit}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-indigo-800 text-white text-xs font-semibold cursor-pointer"
+                  className="w-full sm:w-auto min-h-[42px] inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-indigo-800 text-white text-xs font-semibold cursor-pointer"
                 >
                   {savingEdit && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   Simpan Perubahan
@@ -418,8 +482,8 @@ export const AdminCounselorManager: React.FC<AdminCounselorManagerProps> = ({
 
       {/* Modal Konfirmasi Hapus Guru BK */}
       {deleteTarget && (
-        <div className="fixed inset-0 z-50 bg-slate-950/60 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl border border-slate-200 max-w-md w-full p-6">
+        <div className="fixed inset-0 z-50 bg-slate-950/60 flex items-center justify-center p-3 sm:p-4">
+          <div className="bg-white rounded-xl border border-slate-200 max-w-md w-full p-5 sm:p-6">
             <h3 className="font-display text-lg font-bold text-slate-950">
               Hapus Akun Guru BK?
             </h3>
@@ -427,12 +491,12 @@ export const AdminCounselorManager: React.FC<AdminCounselorManagerProps> = ({
               Akun milik <strong>{deleteTarget.fullName}</strong> (@{deleteTarget.username}) akan
               dihapus permanen dan tidak lagi dapat mengakses Portal Guru BK.
             </p>
-            <div className="mt-6 flex justify-end gap-3">
+            <div className="mt-6 flex flex-col-reverse sm:flex-row sm:justify-end gap-2.5 sm:gap-3">
               <button
                 type="button"
                 disabled={deleting}
                 onClick={() => setDeleteTarget(null)}
-                className="px-4 py-2 rounded-lg border border-slate-200 text-sm font-medium text-slate-700 cursor-pointer"
+                className="w-full sm:w-auto min-h-[42px] px-4 py-2 rounded-lg border border-slate-200 text-sm font-medium text-slate-700 cursor-pointer"
               >
                 Batal
               </button>
@@ -440,7 +504,7 @@ export const AdminCounselorManager: React.FC<AdminCounselorManagerProps> = ({
                 type="button"
                 disabled={deleting}
                 onClick={handleConfirmDelete}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-red-700 hover:bg-red-800 text-white text-sm font-semibold cursor-pointer"
+                className="w-full sm:w-auto min-h-[42px] inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-red-700 hover:bg-red-800 text-white text-sm font-semibold cursor-pointer"
               >
                 {deleting && <Loader2 className="w-4 h-4 animate-spin" />}
                 Ya, Hapus Akun

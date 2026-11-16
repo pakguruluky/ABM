@@ -7,9 +7,11 @@ import {
   Lock,
   Mail,
   MapPin,
+  Menu,
   Phone,
   ShieldCheck,
   UserCheck,
+  X,
 } from 'lucide-react';
 import { APTITUDE_DIMENSIONS, INTEREST_DIMENSIONS } from '../data/abmCatalog';
 import { AssessmentSettings, InstitutionSettings } from '../types/abm';
@@ -43,6 +45,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
   const [selectedCluster, setSelectedCluster] =
     useState<(typeof CLUSTER_TABS)[number]>('Semua');
   const [heroImgError, setHeroImgError] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const filteredInterests =
     selectedCluster === 'Semua'
@@ -58,32 +61,32 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col">
-      {/* Top Navigation — 3-Zone Contract */}
+      {/* Top Navigation — 3-Zone Contract + Tablet/Mobile Drawer */}
       <header className="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3 sm:gap-4 lg:gap-8">
           {/* Zone 1: Brand Wordmark / Logo */}
           <a
             href="#beranda"
-            className="flex items-center gap-3 min-w-0 shrink-0 focus-visible:outline-2 focus-visible:outline-indigo-700 rounded-md"
+            className="flex items-center gap-2.5 sm:gap-3 min-w-0 shrink-0 focus-visible:outline-2 focus-visible:outline-indigo-700 rounded-md"
           >
             {institution.logoBase64 ? (
               <img
                 src={institution.logoBase64}
                 alt={`Logo ${institution.name}`}
-                className="w-9 h-9 object-contain rounded-md shrink-0"
+                className="w-8 h-8 sm:w-9 sm:h-9 object-contain rounded-md shrink-0"
                 referrerPolicy="no-referrer"
               />
             ) : (
-              <div className="w-9 h-9 rounded-lg bg-indigo-900 text-white flex items-center justify-center shrink-0">
-                <GraduationCap className="w-5 h-5" />
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-indigo-900 text-white flex items-center justify-center shrink-0">
+                <GraduationCap className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
             )}
-            <span className="font-display font-bold text-base sm:text-lg tracking-tight text-slate-900 whitespace-nowrap truncate max-w-[220px] sm:max-w-xs">
+            <span className="font-display font-bold text-sm sm:text-base lg:text-lg tracking-tight text-slate-900 whitespace-nowrap truncate max-w-[145px] sm:max-w-[230px] lg:max-w-xs">
               {institution.name}
             </span>
           </a>
 
-          {/* Zone 2: Concise Nav Links */}
+          {/* Zone 2: Concise Nav Links (Laptop & Desktop) */}
           <nav className="hidden lg:flex items-center gap-7 text-sm font-medium text-slate-600">
             <a
               href="#tentang"
@@ -111,8 +114,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             </a>
           </nav>
 
-          {/* Zone 3: Primary Action + Discreet Counselor/Admin */}
-          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          {/* Zone 3: Primary Action + Discreet Counselor/Admin + Mobile/Tablet Toggle */}
+          <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
             <button
               type="button"
               onClick={onOpenCounselor}
@@ -124,7 +127,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             <button
               type="button"
               onClick={onOpenAdmin}
-              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-slate-600 hover:text-indigo-900 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+              className="hidden md:inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-slate-600 hover:text-indigo-900 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
             >
               <Lock className="w-3.5 h-3.5" />
               Portal Admin
@@ -132,37 +135,119 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             <button
               type="button"
               onClick={onStartRegister}
-              className="inline-flex items-center gap-2 px-4 py-2 text-xs sm:text-sm font-semibold text-white bg-indigo-800 hover:bg-indigo-900 rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+              className="inline-flex items-center justify-center gap-2 px-3 sm:px-4 py-2 min-h-[38px] text-xs sm:text-sm font-semibold text-white bg-indigo-800 hover:bg-indigo-900 rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer"
             >
-              Daftar &amp; Mulai Tes
+              <span className="sm:hidden">Mulai Tes</span>
+              <span className="hidden sm:inline">Daftar &amp; Mulai Tes</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen((v) => !v)}
+              aria-expanded={mobileMenuOpen}
+              aria-label={mobileMenuOpen ? 'Tutup menu navigasi' : 'Buka menu navigasi'}
+              className="lg:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
+
+        {/* Mobile & Tablet Navigation Drawer (< lg) */}
+        {mobileMenuOpen && (
+          <div className="lg:hidden border-t border-slate-200 bg-white px-4 py-4 space-y-4">
+            <nav className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-sm font-medium text-slate-700">
+              <a
+                href="#tentang"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-3 py-2.5 rounded-lg bg-slate-50 hover:bg-slate-100 text-center"
+              >
+                Tentang ABM
+              </a>
+              <a
+                href="#aspek-bakat"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-3 py-2.5 rounded-lg bg-slate-50 hover:bg-slate-100 text-center"
+              >
+                7 Aspek Bakat
+              </a>
+              <a
+                href="#aspek-minat"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-3 py-2.5 rounded-lg bg-slate-50 hover:bg-slate-100 text-center"
+              >
+                18 Aspek Minat
+              </a>
+              <a
+                href="#alur-tes"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-3 py-2.5 rounded-lg bg-slate-50 hover:bg-slate-100 text-center"
+              >
+                Alur Tes
+              </a>
+            </nav>
+
+            <div className="pt-3 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onStartLogin();
+                }}
+                className="inline-flex items-center justify-center gap-2 min-h-[44px] px-4 py-2.5 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-xs font-semibold text-slate-800 cursor-pointer"
+              >
+                <UserCheck className="w-4 h-4 text-emerald-700" />
+                Login Siswa (Lihat Hasil)
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenCounselor();
+                }}
+                className="inline-flex items-center justify-center gap-2 min-h-[44px] px-4 py-2.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 cursor-pointer"
+              >
+                <UserCheck className="w-4 h-4 text-indigo-800" />
+                Portal Guru BK
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenAdmin();
+                }}
+                className="inline-flex items-center justify-center gap-2 min-h-[44px] px-4 py-2.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 cursor-pointer"
+              >
+                <Lock className="w-4 h-4 text-slate-700" />
+                Portal Admin
+              </button>
+            </div>
+          </div>
+        )}
       </header>
 
       <main className="flex-1">
         {/* Hero Section */}
         <section id="beranda" className="bg-white border-b border-slate-200">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-stretch">
               <div className="lg:col-span-7 flex flex-col justify-center">
                 <p className="text-xs sm:text-sm font-medium text-indigo-800 mb-3">
                   {institution.subtitle} · {institution.city}
                 </p>
-                <h1 className="font-display text-3xl sm:text-4xl lg:text-[2.75rem] font-bold tracking-tight text-slate-950 leading-[1.15] [text-wrap:balance]">
+                <h1 className="font-display text-2xl sm:text-4xl lg:text-[2.75rem] font-bold tracking-tight text-slate-950 leading-[1.18] sm:leading-[1.15] [text-wrap:balance]">
                   Petakan Potensi Diri dengan Asesmen Bakat dan Minat Terpadu
                 </h1>
-                <p className="mt-5 text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl">
+                <p className="mt-4 sm:mt-5 text-sm sm:text-lg text-slate-600 leading-relaxed max-w-2xl">
                   Instrumen evaluasi psikometrik komprehensif yang mengukur 7 dimensi bakat kognitif
                   dan 18 klaster minat karier untuk membantu peserta didik menentukan jurusan
                   perguruan tinggi serta rencana karier secara objektif.
                 </p>
 
-                <div className="mt-8 flex flex-wrap items-center gap-4">
+                <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 sm:gap-4">
                   <button
                     type="button"
                     onClick={onStartRegister}
-                    className="inline-flex items-center gap-2.5 px-6 py-3.5 text-sm font-semibold text-white bg-indigo-800 hover:bg-indigo-900 rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 min-h-[46px] text-sm font-semibold text-white bg-indigo-800 hover:bg-indigo-900 rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer"
                   >
                     Daftar &amp; Mulai Tes
                     <ArrowRight className="w-4 h-4" />
@@ -170,7 +255,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                   <button
                     type="button"
                     onClick={onStartLogin}
-                    className="inline-flex items-center gap-2 px-6 py-3.5 text-sm font-semibold text-slate-800 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 min-h-[46px] text-sm font-semibold text-slate-800 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer"
                   >
                     <UserCheck className="w-4 h-4 text-emerald-700" />
                     Login Siswa (Lihat Hasil)
@@ -490,7 +575,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               ))}
             </div>
 
-            <div className="mt-12 rounded-xl bg-indigo-950 text-white p-8 sm:p-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <div className="mt-12 rounded-xl bg-indigo-950 text-white p-6 sm:p-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
               <div>
                 <h3 className="font-display text-xl sm:text-2xl font-bold">
                   Siap Mengetahui Peta Bakat dan Minat Anda?
@@ -500,18 +585,18 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                   sebelum memulai sesi tes bakat berbatas waktu.
                 </p>
               </div>
-              <div className="flex flex-wrap items-center gap-3 shrink-0">
+              <div className="w-full md:w-auto flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0">
                 <button
                   type="button"
                   onClick={onStartRegister}
-                  className="px-5 py-3 text-sm font-semibold bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                  className="w-full sm:w-auto inline-flex items-center justify-center px-5 py-3 min-h-[44px] text-sm font-semibold bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer"
                 >
                   Daftar &amp; Mulai Tes
                 </button>
                 <button
                   type="button"
                   onClick={onStartLogin}
-                  className="px-5 py-3 text-sm font-semibold bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                  className="w-full sm:w-auto inline-flex items-center justify-center px-5 py-3 min-h-[44px] text-sm font-semibold bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer"
                 >
                   Login Siswa
                 </button>

@@ -389,8 +389,120 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col lg:flex-row">
-      {/* Sidebar Navigation */}
-      <aside className="lg:w-68 bg-slate-900 text-slate-200 flex flex-col shrink-0">
+      {/* Compact Mobile & Tablet Navigation Header (< lg) */}
+      <div className="lg:hidden bg-slate-900 text-slate-200 sticky top-0 z-30 border-b border-slate-800">
+        <div className="px-4 py-3 flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <p className="text-[11px] font-semibold text-emerald-400 uppercase tracking-wider">
+              Portal Pengelola ABM
+            </p>
+            <p className="font-display font-bold text-sm text-white truncate">
+              {institution.name}
+            </p>
+          </div>
+          <div className="flex items-center gap-1.5 shrink-0">
+            <button
+              type="button"
+              onClick={onBackHome}
+              title="Lihat Landing Page"
+              className="inline-flex items-center gap-1.5 px-2.5 py-2 min-h-[38px] rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-medium text-slate-200 transition-colors cursor-pointer"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Beranda</span>
+            </button>
+            <button
+              type="button"
+              onClick={handleAdminLogout}
+              title="Keluar Admin"
+              className="inline-flex items-center gap-1.5 px-2.5 py-2 min-h-[38px] rounded-lg bg-red-950/60 hover:bg-red-900/70 text-xs font-medium text-red-200 transition-colors cursor-pointer"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              <span>Keluar</span>
+            </button>
+          </div>
+        </div>
+
+        <nav className="px-3 pb-2.5 flex items-center gap-1.5 overflow-x-auto">
+          <button
+            type="button"
+            onClick={() => setActiveMenu('students')}
+            className={`inline-flex items-center gap-1.5 px-3 py-2 min-h-[38px] rounded-lg text-xs font-semibold whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
+              activeMenu === 'students'
+                ? 'bg-indigo-700 text-white'
+                : 'bg-slate-800/80 text-slate-300 hover:bg-slate-800'
+            }`}
+          >
+            <Users className="w-3.5 h-3.5" />
+            Data Siswa &amp; PDF
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              setInstForm({
+                name: institution.name,
+                subtitle: institution.subtitle,
+                npsn: institution.npsn,
+                address: institution.address,
+                city: institution.city,
+                phone: institution.phone,
+                email: institution.email,
+                website: institution.website,
+                principalName: institution.principalName,
+                principalNip: institution.principalNip,
+                logoBase64: institution.logoBase64,
+              });
+              setInstSavedNotice('');
+              setActiveMenu('institution');
+            }}
+            className={`inline-flex items-center gap-1.5 px-3 py-2 min-h-[38px] rounded-lg text-xs font-semibold whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
+              activeMenu === 'institution'
+                ? 'bg-indigo-700 text-white'
+                : 'bg-slate-800/80 text-slate-300 hover:bg-slate-800'
+            }`}
+          >
+            <Building2 className="w-3.5 h-3.5" />
+            Lembaga
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              setReleaseForm({
+                mode: assessmentSettings.mode,
+                releaseStart: assessmentSettings.releaseStart || '',
+                releaseEnd: assessmentSettings.releaseEnd || '',
+              });
+              setReleaseSavedNotice('');
+              setActiveMenu('release');
+            }}
+            className={`inline-flex items-center gap-1.5 px-3 py-2 min-h-[38px] rounded-lg text-xs font-semibold whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
+              activeMenu === 'release'
+                ? 'bg-indigo-700 text-white'
+                : 'bg-slate-800/80 text-slate-300 hover:bg-slate-800'
+            }`}
+          >
+            <Settings className="w-3.5 h-3.5" />
+            Rilis Hasil
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveMenu('counselors')}
+            className={`inline-flex items-center gap-1.5 px-3 py-2 min-h-[38px] rounded-lg text-xs font-semibold whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
+              activeMenu === 'counselors'
+                ? 'bg-indigo-700 text-white'
+                : 'bg-slate-800/80 text-slate-300 hover:bg-slate-800'
+            }`}
+          >
+            <UserCheck className="w-3.5 h-3.5" />
+            Akun Guru BK
+          </button>
+        </nav>
+      </div>
+
+      {/* Sidebar Navigation (Laptop & Desktop >= lg) */}
+      <aside className="hidden lg:flex lg:w-68 bg-slate-900 text-slate-200 flex-col shrink-0">
         <div className="p-5 border-b border-slate-800">
           <p className="text-xs font-semibold text-emerald-400 uppercase tracking-wider">
             Portal Pengelola ABM
@@ -501,10 +613,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
       {/* Main Content Viewport */}
       <div className="flex-1 min-w-0 flex flex-col">
-        <header className="bg-white border-b border-slate-200 px-6 py-4 flex flex-wrap items-center justify-between gap-4">
-          <div>
+        <header className="bg-white border-b border-slate-200 px-4 sm:px-6 py-3.5 sm:py-4 flex flex-wrap items-center justify-between gap-3 sm:gap-4">
+          <div className="min-w-0">
             <p className="text-xs text-slate-500">Dasbor Admin ABM</p>
-            <h1 className="font-display text-lg sm:text-xl font-bold text-slate-950">
+            <h1 className="font-display text-base sm:text-xl font-bold text-slate-950">
               {activeMenu === 'students' && 'Monitoring Peserta, Review & Ekspor PDF'}
               {activeMenu === 'institution' && 'Pengaturan Profil & Kop Surat Lembaga'}
               {activeMenu === 'release' && 'Kontrol Rilis Hasil Asesmen Siswa'}
@@ -520,7 +632,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           )}
         </header>
 
-        <main className="flex-1 p-6 space-y-6 max-w-7xl w-full mx-auto">
+        <main className="flex-1 p-4 sm:p-6 space-y-5 sm:space-y-6 max-w-7xl w-full mx-auto">
           {/* MENU 1: PENGATURAN LEMBAGA */}
           {activeMenu === 'institution' && (
             <form
@@ -830,28 +942,28 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           {activeMenu === 'students' && (
             <div className="space-y-6">
               {/* Summary Metrics */}
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="bg-white border border-slate-200 rounded-xl p-5">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5">
                   <p className="text-xs font-medium text-slate-500">Total Peserta Terdaftar</p>
-                  <p className="font-mono text-2xl font-bold text-slate-950 mt-1 tabular-nums">
+                  <p className="font-mono text-xl sm:text-2xl font-bold text-slate-950 mt-1 tabular-nums">
                     {stats.total}
                   </p>
                 </div>
-                <div className="bg-white border border-slate-200 rounded-xl p-5">
+                <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5">
                   <p className="text-xs font-medium text-slate-500">Selesai Mengerjakan</p>
-                  <p className="font-mono text-2xl font-bold text-indigo-800 mt-1 tabular-nums">
+                  <p className="font-mono text-xl sm:text-2xl font-bold text-indigo-800 mt-1 tabular-nums">
                     {stats.completed}
                   </p>
                 </div>
-                <div className="bg-white border border-slate-200 rounded-xl p-5">
+                <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5">
                   <p className="text-xs font-medium text-slate-500">Menunggu Review Admin</p>
-                  <p className="font-mono text-2xl font-bold text-amber-700 mt-1 tabular-nums">
+                  <p className="font-mono text-xl sm:text-2xl font-bold text-amber-700 mt-1 tabular-nums">
                     {stats.pendingReview}
                   </p>
                 </div>
-                <div className="bg-white border border-slate-200 rounded-xl p-5">
+                <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5">
                   <p className="text-xs font-medium text-slate-500">Disetujui / Dirilis</p>
-                  <p className="font-mono text-2xl font-bold text-emerald-700 mt-1 tabular-nums">
+                  <p className="font-mono text-xl sm:text-2xl font-bold text-emerald-700 mt-1 tabular-nums">
                     {stats.approved}
                   </p>
                 </div>
@@ -861,17 +973,20 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               <AdminAnalyticsCharts allStudents={students} filteredStudents={filteredStudents} />
 
               {/* Controls & Global Export */}
-              <div className="bg-white border border-slate-200 rounded-xl p-5 space-y-4">
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <div className="flex flex-wrap items-center gap-3">
+              <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 space-y-4">
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+                  <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2.5 sm:gap-3">
                     <button
                       type="button"
                       disabled={students.length === 0}
                       onClick={() => exportRecapStudentsPdf(students, institution)}
-                      className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-indigo-800 hover:bg-indigo-900 disabled:opacity-40 text-white text-xs sm:text-sm font-semibold transition-colors cursor-pointer whitespace-nowrap"
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[42px] rounded-lg bg-indigo-800 hover:bg-indigo-900 disabled:opacity-40 text-white text-xs sm:text-sm font-semibold transition-colors cursor-pointer whitespace-nowrap"
                     >
-                      <FileSpreadsheet className="w-4 h-4" />
-                      Unduh Rekapitulasi Seluruh Siswa (PDF Landscape)
+                      <FileSpreadsheet className="w-4 h-4 shrink-0" />
+                      <span className="sm:hidden">Unduh Rekap Siswa (PDF)</span>
+                      <span className="hidden sm:inline">
+                        Unduh Rekapitulasi Seluruh Siswa (PDF Landscape)
+                      </span>
                     </button>
 
                     {stats.pendingReview > 0 && (
@@ -879,7 +994,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                         type="button"
                         disabled={bulkApproving}
                         onClick={handleApproveAll}
-                        className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-emerald-700 hover:bg-emerald-800 disabled:opacity-50 text-white text-xs sm:text-sm font-semibold transition-colors cursor-pointer whitespace-nowrap"
+                        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[42px] rounded-lg bg-emerald-700 hover:bg-emerald-800 disabled:opacity-50 text-white text-xs sm:text-sm font-semibold transition-colors cursor-pointer whitespace-nowrap"
                       >
                         {bulkApproving ? (
                           <Loader2 className="w-4 h-4 animate-spin" />
@@ -951,10 +1066,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 </div>
               </div>
 
-              {/* Students Data Table */}
+              {/* Students Data Table (Tablet/Laptop/Desktop) & Card List (Mobile/Small Tablet) */}
               <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
                 {filteredStudents.length === 0 ? (
-                  <div className="p-12 text-center">
+                  <div className="p-8 sm:p-12 text-center">
                     <Users className="w-10 h-10 text-slate-300 mx-auto mb-3" />
                     <p className="font-display font-semibold text-slate-800">
                       {students.length === 0
@@ -968,123 +1083,236 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     </p>
                   </div>
                 ) : (
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse">
-                      <thead>
-                        <tr className="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-600">
-                          <th className="py-3 px-4">Peserta Didik</th>
-                          <th className="py-3 px-4">Kelas &amp; Sekolah</th>
-                          <th className="py-3 px-4">Pilihan Jurusan</th>
-                          <th className="py-3 px-4">Status Tes</th>
-                          <th className="py-3 px-4">Status Review</th>
-                          <th className="py-3 px-4 text-right">Aksi</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-slate-100 text-xs sm:text-sm">
-                        {filteredStudents.map((student) => (
-                          <tr key={student.id} className="hover:bg-slate-50/70">
-                            <td className="py-3 px-4">
-                              <p className="font-semibold text-slate-900">{student.fullName}</p>
-                              <p className="text-xs font-mono text-slate-500">
-                                @{student.username}
+                  <>
+                    {/* Mobile & Small Tablet Card Layout (< md) */}
+                    <div className="md:hidden divide-y divide-slate-200">
+                      {filteredStudents.map((student) => (
+                        <div key={student.id} className="p-4 space-y-3">
+                          <div className="flex items-start justify-between gap-2">
+                            <div className="min-w-0">
+                              <p className="font-semibold text-sm text-slate-900 truncate">
+                                {student.fullName}
                               </p>
-                            </td>
-                            <td className="py-3 px-4">
-                              <p className="font-medium text-slate-800">{student.classMajor}</p>
-                              <p className="text-xs text-slate-500">{student.schoolOrigin}</p>
-                            </td>
-                            <td className="py-3 px-4 text-xs text-slate-700">
-                              <p>1. {student.majorChoice1}</p>
-                              <p className="text-slate-500">2. {student.majorChoice2}</p>
-                            </td>
-                            <td className="py-3 px-4 whitespace-nowrap">
-                              {student.testStatus === 'completed' ? (
-                                <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-700">
-                                  <CheckCircle2 className="w-3.5 h-3.5" />
-                                  Selesai
-                                </span>
-                              ) : student.testStatus === 'in_progress' ? (
-                                <span className="inline-flex items-center gap-1 text-xs font-semibold text-indigo-700">
-                                  <Clock className="w-3.5 h-3.5" />
-                                  Berjalan
-                                </span>
-                              ) : (
-                                <span className="text-xs text-slate-500">Terdaftar</span>
-                              )}
-                            </td>
-                            <td className="py-3 px-4 whitespace-nowrap">
-                              {student.reviewStatus === 'approved' ? (
-                                <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-700">
-                                  <Check className="w-3.5 h-3.5" />
-                                  Disetujui
-                                </span>
-                              ) : (
-                                <span className="inline-flex items-center gap-1 text-xs font-semibold text-amber-700">
-                                  <Hourglass className="w-3.5 h-3.5" />
-                                  Pending
-                                </span>
-                              )}
-                            </td>
-                            <td className="py-3 px-4 text-right whitespace-nowrap">
-                              <div className="inline-flex items-center gap-1.5">
-                                <button
-                                  type="button"
-                                  onClick={() => handleToggleReview(student)}
-                                  title={
-                                    student.reviewStatus === 'approved'
-                                      ? 'Tahan hasil siswa'
-                                      : 'Setujui / Rilis hasil siswa'
-                                  }
-                                  className={`px-2.5 py-1.5 rounded-md text-xs font-semibold border transition-colors cursor-pointer ${
-                                    student.reviewStatus === 'approved'
-                                      ? 'border-slate-200 bg-white text-slate-700 hover:bg-slate-100'
-                                      : 'border-emerald-200 bg-emerald-50 text-emerald-800 hover:bg-emerald-100'
-                                  }`}
-                                >
-                                  {student.reviewStatus === 'approved'
-                                    ? 'Tahan'
-                                    : 'Setujui / Rilis'}
-                                </button>
-
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    setSelectedStudent(student);
-                                    setEditDraft(student);
-                                    setEditMode(false);
-                                  }}
-                                  title="Detail & Edit Data"
-                                  className="p-1.5 rounded-md border border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-indigo-800 cursor-pointer"
-                                >
-                                  <FileText className="w-4 h-4" />
-                                </button>
-
-                                <button
-                                  type="button"
-                                  disabled={student.testStatus !== 'completed'}
-                                  onClick={() => exportIndividualStudentPdf(student, institution)}
-                                  title="Unduh Laporan PDF Individual (A4)"
-                                  className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-md bg-indigo-50 border border-indigo-200 text-indigo-800 hover:bg-indigo-100 disabled:opacity-40 text-xs font-semibold cursor-pointer"
-                                >
-                                  <Download className="w-3.5 h-3.5" />
-                                  PDF
-                                </button>
-
-                                <button
-                                  type="button"
-                                  onClick={() => setDeleteTarget(student)}
-                                  title="Hapus Data Siswa"
-                                  className="p-1.5 rounded-md border border-slate-200 text-slate-500 hover:bg-red-50 hover:text-red-700 hover:border-red-200 cursor-pointer"
-                                >
-                                  <Trash2 className="w-4 h-4" />
-                                </button>
+                              <p className="text-xs font-mono text-slate-500">
+                                @{student.username} · {student.classMajor}
+                              </p>
+                              <p className="text-xs text-slate-500 truncate">
+                                {student.schoolOrigin}
+                              </p>
+                            </div>
+                            <div className="text-right shrink-0 space-y-1">
+                              <div>
+                                {student.testStatus === 'completed' ? (
+                                  <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-700">
+                                    <CheckCircle2 className="w-3.5 h-3.5" />
+                                    Selesai
+                                  </span>
+                                ) : student.testStatus === 'in_progress' ? (
+                                  <span className="inline-flex items-center gap-1 text-xs font-semibold text-indigo-700">
+                                    <Clock className="w-3.5 h-3.5" />
+                                    Berjalan
+                                  </span>
+                                ) : (
+                                  <span className="text-xs text-slate-500">Terdaftar</span>
+                                )}
                               </div>
-                            </td>
+                              <div>
+                                {student.reviewStatus === 'approved' ? (
+                                  <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700">
+                                    <Check className="w-3 h-3" />
+                                    Dirilis
+                                  </span>
+                                ) : (
+                                  <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-amber-700">
+                                    <Hourglass className="w-3 h-3" />
+                                    Pending
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="text-xs text-slate-600 bg-slate-50 rounded-lg px-3 py-2 border border-slate-100">
+                            <p className="truncate">
+                              <span className="text-slate-400">Pilihan 1:</span>{' '}
+                              <strong className="text-slate-800">{student.majorChoice1}</strong>
+                            </p>
+                            <p className="truncate mt-0.5">
+                              <span className="text-slate-400">Pilihan 2:</span>{' '}
+                              <span className="text-slate-700">{student.majorChoice2}</span>
+                            </p>
+                          </div>
+
+                          <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2 pt-1">
+                            <button
+                              type="button"
+                              onClick={() => handleToggleReview(student)}
+                              className={`min-h-[38px] px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors cursor-pointer ${
+                                student.reviewStatus === 'approved'
+                                  ? 'border-slate-200 bg-white text-slate-700 hover:bg-slate-100'
+                                  : 'border-emerald-200 bg-emerald-50 text-emerald-800 hover:bg-emerald-100'
+                              }`}
+                            >
+                              {student.reviewStatus === 'approved'
+                                ? 'Tahan Hasil'
+                                : 'Setujui / Rilis'}
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setSelectedStudent(student);
+                                setEditDraft(student);
+                                setEditMode(false);
+                              }}
+                              className="min-h-[38px] inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 cursor-pointer"
+                            >
+                              <FileText className="w-3.5 h-3.5" />
+                              Detail / Edit
+                            </button>
+
+                            <button
+                              type="button"
+                              disabled={student.testStatus !== 'completed'}
+                              onClick={() => exportIndividualStudentPdf(student, institution)}
+                              className="min-h-[38px] inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-50 border border-indigo-200 text-indigo-800 hover:bg-indigo-100 disabled:opacity-40 text-xs font-semibold cursor-pointer"
+                            >
+                              <Download className="w-3.5 h-3.5" />
+                              Unduh PDF
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() => setDeleteTarget(student)}
+                              className="min-h-[38px] inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg border border-red-200 text-red-700 bg-red-50/50 hover:bg-red-50 text-xs font-semibold cursor-pointer"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                              Hapus
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Desktop & Large Tablet Table (>= md) */}
+                    <div className="hidden md:block overflow-x-auto">
+                      <table className="w-full text-left border-collapse">
+                        <thead>
+                          <tr className="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-600">
+                            <th className="py-3 px-4">Peserta Didik</th>
+                            <th className="py-3 px-4">Kelas &amp; Sekolah</th>
+                            <th className="py-3 px-4">Pilihan Jurusan</th>
+                            <th className="py-3 px-4">Status Tes</th>
+                            <th className="py-3 px-4">Status Review</th>
+                            <th className="py-3 px-4 text-right">Aksi</th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100 text-xs sm:text-sm">
+                          {filteredStudents.map((student) => (
+                            <tr key={student.id} className="hover:bg-slate-50/70">
+                              <td className="py-3 px-4">
+                                <p className="font-semibold text-slate-900">{student.fullName}</p>
+                                <p className="text-xs font-mono text-slate-500">
+                                  @{student.username}
+                                </p>
+                              </td>
+                              <td className="py-3 px-4">
+                                <p className="font-medium text-slate-800">{student.classMajor}</p>
+                                <p className="text-xs text-slate-500">{student.schoolOrigin}</p>
+                              </td>
+                              <td className="py-3 px-4 text-xs text-slate-700">
+                                <p>1. {student.majorChoice1}</p>
+                                <p className="text-slate-500">2. {student.majorChoice2}</p>
+                              </td>
+                              <td className="py-3 px-4 whitespace-nowrap">
+                                {student.testStatus === 'completed' ? (
+                                  <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-700">
+                                    <CheckCircle2 className="w-3.5 h-3.5" />
+                                    Selesai
+                                  </span>
+                                ) : student.testStatus === 'in_progress' ? (
+                                  <span className="inline-flex items-center gap-1 text-xs font-semibold text-indigo-700">
+                                    <Clock className="w-3.5 h-3.5" />
+                                    Berjalan
+                                  </span>
+                                ) : (
+                                  <span className="text-xs text-slate-500">Terdaftar</span>
+                                )}
+                              </td>
+                              <td className="py-3 px-4 whitespace-nowrap">
+                                {student.reviewStatus === 'approved' ? (
+                                  <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-700">
+                                    <Check className="w-3.5 h-3.5" />
+                                    Disetujui
+                                  </span>
+                                ) : (
+                                  <span className="inline-flex items-center gap-1 text-xs font-semibold text-amber-700">
+                                    <Hourglass className="w-3.5 h-3.5" />
+                                    Pending
+                                  </span>
+                                )}
+                              </td>
+                              <td className="py-3 px-4 text-right whitespace-nowrap">
+                                <div className="inline-flex items-center gap-1.5">
+                                  <button
+                                    type="button"
+                                    onClick={() => handleToggleReview(student)}
+                                    title={
+                                      student.reviewStatus === 'approved'
+                                        ? 'Tahan hasil siswa'
+                                        : 'Setujui / Rilis hasil siswa'
+                                    }
+                                    className={`px-2.5 py-1.5 rounded-md text-xs font-semibold border transition-colors cursor-pointer ${
+                                      student.reviewStatus === 'approved'
+                                        ? 'border-slate-200 bg-white text-slate-700 hover:bg-slate-100'
+                                        : 'border-emerald-200 bg-emerald-50 text-emerald-800 hover:bg-emerald-100'
+                                    }`}
+                                  >
+                                    {student.reviewStatus === 'approved'
+                                      ? 'Tahan'
+                                      : 'Setujui / Rilis'}
+                                  </button>
+
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      setSelectedStudent(student);
+                                      setEditDraft(student);
+                                      setEditMode(false);
+                                    }}
+                                    title="Detail & Edit Data"
+                                    className="p-1.5 rounded-md border border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-indigo-800 cursor-pointer"
+                                  >
+                                    <FileText className="w-4 h-4" />
+                                  </button>
+
+                                  <button
+                                    type="button"
+                                    disabled={student.testStatus !== 'completed'}
+                                    onClick={() => exportIndividualStudentPdf(student, institution)}
+                                    title="Unduh Laporan PDF Individual (A4)"
+                                    className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-md bg-indigo-50 border border-indigo-200 text-indigo-800 hover:bg-indigo-100 disabled:opacity-40 text-xs font-semibold cursor-pointer"
+                                  >
+                                    <Download className="w-3.5 h-3.5" />
+                                    PDF
+                                  </button>
+
+                                  <button
+                                    type="button"
+                                    onClick={() => setDeleteTarget(student)}
+                                    title="Hapus Data Siswa"
+                                    className="p-1.5 rounded-md border border-slate-200 text-slate-500 hover:bg-red-50 hover:text-red-700 hover:border-red-200 cursor-pointer"
+                                  >
+                                    <Trash2 className="w-4 h-4" />
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </>
                 )}
               </div>
             </div>
@@ -1099,37 +1327,39 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
       {/* Modal Detail & Edit Siswa */}
       {selectedStudent && editDraft && (
-        <div className="fixed inset-0 z-50 bg-slate-950/60 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl border border-slate-200 max-w-6xl w-full max-h-[90vh] flex flex-col overflow-hidden">
-            <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between gap-4">
-              <div>
-                <h3 className="font-display text-lg font-bold text-slate-950">
+        <div className="fixed inset-0 z-50 bg-slate-950/60 flex items-center justify-center p-2 sm:p-4">
+          <div className="bg-white rounded-xl border border-slate-200 max-w-6xl w-full max-h-[94vh] sm:max-h-[90vh] flex flex-col overflow-hidden">
+            <div className="px-4 sm:px-6 py-3.5 sm:py-4 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3">
+              <div className="min-w-0 flex-1">
+                <h3 className="font-display text-base sm:text-lg font-bold text-slate-950 truncate">
                   {editMode ? 'Edit Biodata Siswa' : `Detail Hasil: ${selectedStudent.fullName}`}
                 </h3>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-slate-500 truncate">
                   @{selectedStudent.username} · Terdaftar{' '}
                   {formatIndonesianDate(selectedStudent.registeredAt)}
                 </p>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 shrink-0">
                 {!editMode && (
                   <button
                     type="button"
                     onClick={() => setEditMode(true)}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 cursor-pointer"
+                    className="inline-flex items-center gap-1.5 min-h-[36px] px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 cursor-pointer"
                   >
                     <Edit3 className="w-3.5 h-3.5" />
-                    Edit Biodata
+                    <span className="hidden sm:inline">Edit Biodata</span>
+                    <span className="sm:hidden">Edit</span>
                   </button>
                 )}
                 {selectedStudent.testStatus === 'completed' && !editMode && (
                   <button
                     type="button"
                     onClick={() => exportIndividualStudentPdf(selectedStudent, institution)}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-800 hover:bg-indigo-900 text-white text-xs font-semibold cursor-pointer"
+                    className="inline-flex items-center gap-1.5 min-h-[36px] px-3 py-1.5 rounded-lg bg-indigo-800 hover:bg-indigo-900 text-white text-xs font-semibold cursor-pointer"
                   >
                     <Download className="w-3.5 h-3.5" />
-                    Unduh PDF A4
+                    <span className="hidden sm:inline">Unduh PDF A4</span>
+                    <span className="sm:hidden">PDF</span>
                   </button>
                 )}
                 <button
@@ -1138,14 +1368,15 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     setSelectedStudent(null);
                     setEditMode(false);
                   }}
-                  className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 cursor-pointer"
+                  aria-label="Tutup modal detail siswa"
+                  className="p-2 rounded-lg text-slate-400 hover:text-slate-700 cursor-pointer"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
             </div>
 
-            <div className="p-6 overflow-y-auto space-y-6">
+            <div className="p-4 sm:p-6 overflow-y-auto space-y-6">
               {editMode ? (
                 <form id="edit-student-form" onSubmit={handleSaveStudentEdit} className="space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -1362,18 +1593,18 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       {/* Inline Delete Confirmation Modal */}
       {deleteTarget && (
         <div className="fixed inset-0 z-50 bg-slate-950/60 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl border border-slate-200 max-w-md w-full p-6">
+          <div className="bg-white rounded-xl border border-slate-200 max-w-md w-full p-5 sm:p-6">
             <h3 className="font-display text-lg font-bold text-slate-950">Hapus Data Peserta?</h3>
             <p className="text-sm text-slate-600 mt-2">
               Data biodata dan hasil asesmen milik <strong>{deleteTarget.fullName}</strong> (@
-              {deleteTarget.username}) akan dihapus permanen dari Firebase.
+              {deleteTarget.username}) akan dihapus permanen dari sistem.
             </p>
-            <div className="mt-6 flex items-center justify-end gap-3">
+            <div className="mt-6 flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2.5 sm:gap-3">
               <button
                 type="button"
                 disabled={deleting}
                 onClick={() => setDeleteTarget(null)}
-                className="px-4 py-2 rounded-lg border border-slate-200 text-sm font-medium text-slate-700 hover:bg-slate-50 cursor-pointer"
+                className="w-full sm:w-auto min-h-[42px] px-4 py-2 rounded-lg border border-slate-200 text-sm font-medium text-slate-700 hover:bg-slate-50 cursor-pointer"
               >
                 Batal
               </button>
@@ -1381,7 +1612,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 type="button"
                 disabled={deleting}
                 onClick={handleConfirmDelete}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-red-700 hover:bg-red-800 text-white text-sm font-semibold cursor-pointer"
+                className="w-full sm:w-auto min-h-[42px] inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-red-700 hover:bg-red-800 text-white text-sm font-semibold cursor-pointer"
               >
                 {deleting && <Loader2 className="w-4 h-4 animate-spin" />}
                 Ya, Hapus Data

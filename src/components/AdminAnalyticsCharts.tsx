@@ -124,7 +124,7 @@ export const AdminAnalyticsCharts: React.FC<AdminAnalyticsChartsProps> = ({
 
   return (
     <section className="space-y-4">
-      <div className="bg-white border border-slate-200 rounded-xl p-5 flex flex-wrap items-center justify-between gap-4">
+      <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
         <div>
           <h2 className="font-display text-base sm:text-lg font-bold text-slate-950">
             Analitik Visual Distribusi Bakat &amp; Minat Peserta
@@ -138,29 +138,35 @@ export const AdminAnalyticsCharts: React.FC<AdminAnalyticsChartsProps> = ({
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
-          <div className="inline-flex items-center gap-1 p-1 bg-slate-100 rounded-lg">
+        <div className="w-full sm:w-auto">
+          <div className="grid grid-cols-2 sm:inline-flex items-center gap-1 p-1 bg-slate-100 rounded-lg">
             <button
               type="button"
               onClick={() => setScope('all')}
-              className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-colors cursor-pointer whitespace-nowrap ${
+              className={`min-h-[36px] px-2.5 sm:px-3 py-1.5 text-xs font-semibold rounded-md transition-colors cursor-pointer whitespace-nowrap text-center ${
                 scope === 'all'
                   ? 'bg-white text-indigo-900 shadow-xs'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              Seluruh Peserta Selesai
+              <span className="sm:hidden">Semua Selesai</span>
+              <span className="hidden sm:inline">Seluruh Peserta Selesai</span>
             </button>
             <button
               type="button"
               onClick={() => setScope('filtered')}
-              className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-colors cursor-pointer whitespace-nowrap ${
+              className={`min-h-[36px] px-2.5 sm:px-3 py-1.5 text-xs font-semibold rounded-md transition-colors cursor-pointer whitespace-nowrap text-center ${
                 scope === 'filtered'
                   ? 'bg-white text-indigo-900 shadow-xs'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              Sesuai Filter Tabel ({filteredStudents.filter((s) => s.testStatus === 'completed').length})
+              <span className="sm:hidden">
+                Filter ({filteredStudents.filter((s) => s.testStatus === 'completed').length})
+              </span>
+              <span className="hidden sm:inline">
+                Sesuai Filter Tabel ({filteredStudents.filter((s) => s.testStatus === 'completed').length})
+              </span>
             </button>
           </div>
         </div>
@@ -171,9 +177,9 @@ export const AdminAnalyticsCharts: React.FC<AdminAnalyticsChartsProps> = ({
           Tidak ada peserta selesai tes pada cakupan filter saat ini.
         </div>
       ) : (
-        <div className="grid grid-cols-1 xl:grid-cols-12 gap-5">
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-4 sm:gap-5">
           {/* Chart 1: Distribusi 7 Aspek Bakat (Bar / Stacked Category) */}
-          <div className="xl:col-span-7 bg-white border border-slate-200 rounded-xl p-5 flex flex-col">
+          <div className="xl:col-span-7 bg-white border border-slate-200 rounded-xl p-4 sm:p-5 flex flex-col">
             <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
               <div>
                 <h3 className="font-display text-sm font-bold text-slate-900">
@@ -306,7 +312,7 @@ export const AdminAnalyticsCharts: React.FC<AdminAnalyticsChartsProps> = ({
           </div>
 
           {/* Chart 2: Radar Profil Bakat Angkatan */}
-          <div className="xl:col-span-5 bg-white border border-slate-200 rounded-xl p-5 flex flex-col">
+          <div className="xl:col-span-5 bg-white border border-slate-200 rounded-xl p-4 sm:p-5 flex flex-col">
             <div className="mb-2">
               <h3 className="font-display text-sm font-bold text-slate-900">
                 Peta Radar Profil Bakat Kolektif
@@ -315,13 +321,13 @@ export const AdminAnalyticsCharts: React.FC<AdminAnalyticsChartsProps> = ({
                 Keseimbangan rata-rata kapasitas kognitif seluruh peserta pada 7 aspek.
               </p>
             </div>
-            <div className="h-72 w-full">
+            <div className="h-64 sm:h-72 w-full">
               <ResponsiveContainer width="100%" height="100%">
-                <RadarChart cx="50%" cy="50%" outerRadius="72%" data={aptitudeChartData}>
+                <RadarChart cx="50%" cy="50%" outerRadius="66%" data={aptitudeChartData}>
                   <PolarGrid stroke="#e2e8f0" />
                   <PolarAngleAxis
                     dataKey="name"
-                    tick={{ fontSize: 11, fill: '#334155', fontWeight: 500 }}
+                    tick={{ fontSize: 10, fill: '#334155', fontWeight: 500 }}
                   />
                   <PolarRadiusAxis
                     angle={90}
@@ -351,7 +357,7 @@ export const AdminAnalyticsCharts: React.FC<AdminAnalyticsChartsProps> = ({
           </div>
 
           {/* Chart 3: Peringkat Rata-Rata 18 Aspek Minat */}
-          <div className="xl:col-span-8 bg-white border border-slate-200 rounded-xl p-5 flex flex-col">
+          <div className="xl:col-span-8 bg-white border border-slate-200 rounded-xl p-4 sm:p-5 flex flex-col">
             <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
               <div>
                 <h3 className="font-display text-sm font-bold text-slate-900">
@@ -373,7 +379,7 @@ export const AdminAnalyticsCharts: React.FC<AdminAnalyticsChartsProps> = ({
                 <BarChart
                   layout="vertical"
                   data={interestChartData}
-                  margin={{ top: 4, right: 20, left: 20, bottom: 4 }}
+                  margin={{ top: 4, right: 14, left: 0, bottom: 4 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" horizontal={false} />
                   <XAxis
@@ -386,8 +392,8 @@ export const AdminAnalyticsCharts: React.FC<AdminAnalyticsChartsProps> = ({
                   <YAxis
                     type="category"
                     dataKey="name"
-                    width={132}
-                    tick={{ fontSize: 11, fill: '#1e293b', fontWeight: 500 }}
+                    width={116}
+                    tick={{ fontSize: 10, fill: '#1e293b', fontWeight: 500 }}
                     axisLine={false}
                     tickLine={false}
                   />
@@ -415,7 +421,7 @@ export const AdminAnalyticsCharts: React.FC<AdminAnalyticsChartsProps> = ({
           </div>
 
           {/* Chart 4: Keselarasan Pilihan Jurusan 1 & 2 */}
-          <div className="xl:col-span-4 bg-white border border-slate-200 rounded-xl p-5 flex flex-col justify-between">
+          <div className="xl:col-span-4 bg-white border border-slate-200 rounded-xl p-4 sm:p-5 flex flex-col justify-between">
             <div>
               <h3 className="font-display text-sm font-bold text-slate-900">
                 Sebaran Keselarasan Pilihan Jurusan
@@ -426,7 +432,7 @@ export const AdminAnalyticsCharts: React.FC<AdminAnalyticsChartsProps> = ({
               </p>
             </div>
 
-            <div className="h-72 w-full my-4">
+            <div className="h-64 sm:h-72 w-full my-4">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart
                   data={alignmentChartData}
@@ -435,7 +441,8 @@ export const AdminAnalyticsCharts: React.FC<AdminAnalyticsChartsProps> = ({
                   <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
                   <XAxis
                     dataKey="status"
-                    tick={{ fontSize: 10.5, fill: '#475569' }}
+                    interval={0}
+                    tick={{ fontSize: 10, fill: '#475569' }}
                     axisLine={{ stroke: '#cbd5e1' }}
                     tickLine={false}
                   />

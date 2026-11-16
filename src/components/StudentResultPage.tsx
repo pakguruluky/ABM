@@ -111,7 +111,7 @@ export const StudentResultPage: React.FC<StudentResultPageProps> = ({
           <button
             type="button"
             onClick={onLogout}
-            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border border-slate-200 bg-white hover:bg-slate-100 text-xs sm:text-sm font-medium text-slate-700 transition-colors cursor-pointer shrink-0"
+            className="inline-flex items-center gap-2 min-h-[40px] px-3.5 py-2 rounded-lg border border-slate-200 bg-white hover:bg-slate-100 text-xs sm:text-sm font-medium text-slate-700 transition-colors cursor-pointer shrink-0"
           >
             <LogOut className="w-4 h-4" />
             Keluar
@@ -119,9 +119,9 @@ export const StudentResultPage: React.FC<StudentResultPageProps> = ({
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+      <main className="max-w-6xl mx-auto px-3 sm:px-6 py-5 sm:py-8">
         {gateState === 'pending_review' && (
-          <div className="max-w-xl mx-auto my-12 bg-white border border-slate-200 rounded-xl p-8 text-center">
+          <div className="max-w-xl mx-auto my-8 sm:my-12 bg-white border border-slate-200 rounded-xl p-6 sm:p-8 text-center">
             <div className="w-14 h-14 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center mx-auto mb-4">
               <Hourglass className="w-7 h-7" />
             </div>
@@ -148,7 +148,7 @@ export const StudentResultPage: React.FC<StudentResultPageProps> = ({
         )}
 
         {gateState === 'scheduled_waiting' && (
-          <div className="max-w-xl mx-auto my-12 bg-white border border-slate-200 rounded-xl p-8 text-center">
+          <div className="max-w-xl mx-auto my-8 sm:my-12 bg-white border border-slate-200 rounded-xl p-6 sm:p-8 text-center">
             <div className="w-14 h-14 rounded-xl bg-indigo-50 text-indigo-800 flex items-center justify-center mx-auto mb-4">
               <Clock className="w-7 h-7" />
             </div>
@@ -167,7 +167,7 @@ export const StudentResultPage: React.FC<StudentResultPageProps> = ({
             </p>
 
             {countdown && (
-              <div className="mt-6 grid grid-cols-4 gap-3">
+              <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
                 {[
                   { label: 'Hari', val: countdown.days },
                   { label: 'Jam', val: countdown.hours },
@@ -178,7 +178,7 @@ export const StudentResultPage: React.FC<StudentResultPageProps> = ({
                     key={box.label}
                     className="rounded-lg bg-slate-50 border border-slate-200 py-3 px-2"
                   >
-                    <p className="font-mono text-2xl font-bold text-indigo-900 tabular-nums">
+                    <p className="font-mono text-xl sm:text-2xl font-bold text-indigo-900 tabular-nums">
                       {String(box.val).padStart(2, '0')}
                     </p>
                     <p className="text-xs text-slate-500 mt-0.5">{box.label}</p>
@@ -195,7 +195,7 @@ export const StudentResultPage: React.FC<StudentResultPageProps> = ({
         )}
 
         {gateState === 'scheduled_closed' && (
-          <div className="max-w-xl mx-auto my-12 bg-white border border-slate-200 rounded-xl p-8 text-center">
+          <div className="max-w-xl mx-auto my-8 sm:my-12 bg-white border border-slate-200 rounded-xl p-6 sm:p-8 text-center">
             <div className="w-14 h-14 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center mx-auto mb-4">
               <ShieldAlert className="w-7 h-7" />
             </div>
@@ -214,8 +214,8 @@ export const StudentResultPage: React.FC<StudentResultPageProps> = ({
         )}
 
         {gateState === 'unlocked' && (
-          <div className="space-y-8">
-            <section className="bg-white border border-slate-200 rounded-xl p-6 sm:p-8">
+          <div className="space-y-6 sm:space-y-8">
+            <section className="bg-white border border-slate-200 rounded-xl p-5 sm:p-8">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                   <p className="text-xs font-semibold text-emerald-700 uppercase tracking-wider">

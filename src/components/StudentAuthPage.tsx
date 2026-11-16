@@ -160,48 +160,49 @@ export const StudentAuthPage: React.FC<StudentAuthPageProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-slate-50 py-5 sm:py-8 px-3 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto">
-        <div className="mb-6 flex items-center justify-between">
+        <div className="mb-4 sm:mb-6 flex items-center justify-between gap-3">
           <button
             type="button"
             onClick={onBackHome}
-            className="inline-flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-indigo-900 transition-colors cursor-pointer"
+            className="inline-flex items-center gap-2 min-h-[40px] text-sm font-medium text-slate-600 hover:text-indigo-900 transition-colors cursor-pointer shrink-0"
           >
             <ArrowLeft className="w-4 h-4" />
             Kembali ke Beranda
           </button>
-          <span className="text-xs font-medium text-slate-500 truncate max-w-[200px] sm:max-w-xs">
+          <span className="text-xs font-medium text-slate-500 truncate max-w-[140px] sm:max-w-xs">
             {institution.name}
           </span>
         </div>
 
         <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
           {/* Header & Segmented Tabs */}
-          <div className="px-6 pt-6 pb-5 border-b border-slate-200 bg-slate-50/70">
-            <h1 className="font-display text-xl sm:text-2xl font-bold text-slate-950">
+          <div className="px-4 sm:px-6 pt-5 sm:pt-6 pb-4 sm:pb-5 border-b border-slate-200 bg-slate-50/70">
+            <h1 className="font-display text-lg sm:text-2xl font-bold text-slate-950">
               Portal Peserta Asesmen Bakat &amp; Minat
             </h1>
-            <p className="text-sm text-slate-600 mt-1">
+            <p className="text-xs sm:text-sm text-slate-600 mt-1">
               Daftarkan diri sebagai peserta baru untuk memulai tes atau masuk ke akun siswa guna
               melanjutkan tes dan melihat hasil.
             </p>
 
-            <div className="mt-5 grid grid-cols-2 gap-1 p-1 bg-slate-200/70 rounded-lg">
+            <div className="mt-4 sm:mt-5 grid grid-cols-2 gap-1 p-1 bg-slate-200/70 rounded-lg">
               <button
                 type="button"
                 onClick={() => {
                   setActiveTab('register');
                   setErrorMsg('');
                 }}
-                className={`flex items-center justify-center gap-2 py-2.5 px-3 text-xs sm:text-sm font-semibold rounded-md transition-colors cursor-pointer whitespace-nowrap ${
+                className={`flex items-center justify-center gap-1.5 sm:gap-2 min-h-[42px] py-2 px-2 sm:px-3 text-xs sm:text-sm font-semibold rounded-md transition-colors cursor-pointer whitespace-nowrap ${
                   activeTab === 'register'
                     ? 'bg-white text-indigo-900 shadow-xs'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
-                <UserPlus className="w-4 h-4" />
-                Pendaftaran Peserta Baru
+                <UserPlus className="w-4 h-4 shrink-0" />
+                <span className="sm:hidden">Daftar Baru</span>
+                <span className="hidden sm:inline">Pendaftaran Peserta Baru</span>
               </button>
               <button
                 type="button"
@@ -209,19 +210,20 @@ export const StudentAuthPage: React.FC<StudentAuthPageProps> = ({
                   setActiveTab('login');
                   setErrorMsg('');
                 }}
-                className={`flex items-center justify-center gap-2 py-2.5 px-3 text-xs sm:text-sm font-semibold rounded-md transition-colors cursor-pointer whitespace-nowrap ${
+                className={`flex items-center justify-center gap-1.5 sm:gap-2 min-h-[42px] py-2 px-2 sm:px-3 text-xs sm:text-sm font-semibold rounded-md transition-colors cursor-pointer whitespace-nowrap ${
                   activeTab === 'login'
                     ? 'bg-white text-indigo-900 shadow-xs'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
-                <LogIn className="w-4 h-4" />
-                Login Siswa Terdaftar
+                <LogIn className="w-4 h-4 shrink-0" />
+                <span className="sm:hidden">Login Siswa</span>
+                <span className="hidden sm:inline">Login Siswa Terdaftar</span>
               </button>
             </div>
           </div>
 
-          <div className="p-6 sm:p-8">
+          <div className="p-4 sm:p-8">
             {errorMsg && (
               <div
                 role="alert"
